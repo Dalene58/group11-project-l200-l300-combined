@@ -1,0 +1,31 @@
+resource_id,resource_type,capacity_tons,availability_status,home_location_id
+R001,Compactor,14,Available,L001
+R002,Mini Truck,12,Available,L002
+R003,Compactor,11,Available,L003
+R004,Garbage Truck,13,Available,L004
+R005,Compactor,8,Maintenance,L005
+R006,Mini Truck,13,Available,L006
+R007,Garbage Truck,14,Available,L007
+R008,Compactor,9,Available,L008
+R009,Mini Truck,5,Available,L009
+R010,Compactor,8,Maintenance,L010
+R011,Mini Truck,15,Available,L011
+R012,Mini Truck,19,Available,L012
+R013,Compactor,9,Available,L013
+R014,Compactor,20,Available,L014
+R015,Mini Truck,6,Maintenance,L015
+R016,Compactor,19,Available,L016
+R017,Garbage Truck,6,Available,L017
+R018,Compactor,12,Available,L018
+R019,Compactor,5,Available,L019
+R020,Garbage Truck,14,Maintenance,L020
+R021,Garbage Truck,10,Available,L021
+R022,Mini Truck,5,Available,L022
+R023,Mini Truck,6,Available,L023
+R024,Mini Truck,9,Available,L024
+R025,Garbage Truck,16,Maintenance,L025
+R026,Compactor,11,Available,L026
+R027,Compactor,9,Available,L027
+R028,Mini Truck,11,Available,L028
+R029,Compactor,7,Available,L029
+R030,Mini Truck,20,Maintenance,L030

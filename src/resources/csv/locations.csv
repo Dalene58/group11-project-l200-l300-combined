@@ -1,0 +1,51 @@
+location_id,name,area,location_type,latitude,longitude
+L001,Location 1,Accra Central,Market,5.502,-0.249
+L002,Location 2,Kaneshie,Hospital,5.504,-0.248
+L003,Location 3,Accra Central,Market,5.506,-0.247
+L004,Location 4,Accra Central,Hospital,5.508,-0.246
+L005,Location 5,Kaneshie,Commercial,5.51,-0.245
+L006,Location 6,Madina,Market,5.512,-0.244
+L007,Location 7,Kaneshie,Market,5.514,-0.243
+L008,Location 8,Accra Central,Commercial,5.516,-0.242
+L009,Location 9,Kaneshie,Market,5.518,-0.241
+L010,Location 10,Accra Central,Residential,5.52,-0.24
+L011,Location 11,Osu,Hospital,5.522,-0.239
+L012,Location 12,Legon,Hospital,5.524,-0.238
+L013,Location 13,Accra Central,Hospital,5.526,-0.237
+L014,Location 14,Madina,Hospital,5.528,-0.236
+L015,Location 15,Legon,Commercial,5.53,-0.235
+L016,Location 16,Accra Central,Market,5.532,-0.23399999999999999
+L017,Location 17,Legon,Market,5.534,-0.23299999999999998
+L018,Location 18,Kaneshie,Hospital,5.536,-0.23199999999999998
+L019,Location 19,Madina,Residential,5.538,-0.231
+L020,Location 20,Osu,Hospital,5.54,-0.23
+L021,Location 21,Osu,Residential,5.542,-0.229
+L022,Location 22,Accra Central,Commercial,5.544,-0.228
+L023,Location 23,Kaneshie,Hospital,5.546,-0.227
+L024,Location 24,Madina,Commercial,5.548,-0.226
+L025,Location 25,Madina,Hospital,5.55,-0.225
+L026,Location 26,Accra Central,Hospital,5.552,-0.224
+L027,Location 27,Kaneshie,Commercial,5.554,-0.223
+L028,Location 28,Osu,Residential,5.556,-0.222
+L029,Location 29,Madina,Hospital,5.558,-0.221
+L030,Location 30,Legon,Residential,5.56,-0.22
+L031,Location 31,Legon,Hospital,5.562,-0.219
+L032,Location 32,Osu,Market,5.564,-0.218
+L033,Location 33,Madina,Residential,5.566,-0.217
+L034,Location 34,Osu,Market,5.568,-0.216
+L035,Location 35,Kaneshie,Commercial,5.57,-0.215
+L036,Location 36,Madina,Market,5.572,-0.214
+L037,Location 37,Madina,Commercial,5.574,-0.213
+L038,Location 38,Accra Central,Residential,5.576,-0.212
+L039,Location 39,Accra Central,Commercial,5.578,-0.211
+L040,Location 40,Legon,Commercial,5.58,-0.21
+L041,Location 41,Osu,Market,5.582,-0.209
+L042,Location 42,Osu,Hospital,5.584,-0.208
+L043,Location 43,Legon,Commercial,5.586,-0.207
+L044,Location 44,Accra Central,Commercial,5.588,-0.20600000000000002
+L045,Location 45,Madina,Market,5.59,-0.20500000000000002
+L046,Location 46,Accra Central,Hospital,5.592,-0.20400000000000001
+L047,Location 47,Legon,Commercial,5.594,-0.203
+L048,Location 48,Madina,Hospital,5.596,-0.202
+L049,Location 49,Accra Central,Residential,5.598,-0.201
+L050,Location 50,Madina,Commercial,5.6,-0.2

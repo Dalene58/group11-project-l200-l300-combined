@@ -1,0 +1,11 @@
+site_id,name,location_id,site_type,capacity_tons,status
+DS001,Site 1,L001,Landfill,550,Open
+DS002,Site 2,L002,Landfill,600,Open
+DS003,Site 3,L003,Landfill,650,Open
+DS004,Site 4,L004,Landfill,700,Open
+DS005,Site 5,L005,Landfill,750,Open
+DS006,Site 6,L006,Landfill,800,Open
+DS007,Site 7,L007,Landfill,850,Open
+DS008,Site 8,L008,Landfill,900,Open
+DS009,Site 9,L009,Landfill,950,Open
+DS010,Site 10,L010,Landfill,1000,Open

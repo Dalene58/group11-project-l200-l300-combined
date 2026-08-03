@@ -1,0 +1,9 @@
+waste_type_id,name,description
+WT001,General,General waste
+WT002,Plastic,Plastic waste
+WT003,Organic,Organic waste
+WT004,Glass,Glass waste
+WT005,Metal,Metal waste
+WT006,Paper,Paper waste
+WT007,E-waste,E-waste waste
+WT008,Medical,Medical waste
