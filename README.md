@@ -137,18 +137,42 @@ The schema is defined in `resources/schema.sql` and uses these tables:
 
 - `locations`
 - `roads`
-- `service_requests`
+- `waste_types`
+- `disposal_sites`
 - `resources`
+- `drivers`
+- `collection_requests`
+- `assignments`
 - `algorithm_runs`
-- `trace_steps`
+- `audit_events`
 
 Relationships:
 
 - `roads.from_location_id` and `roads.to_location_id` reference `locations.location_id`
-- `service_requests.location_id` references `locations.location_id`
-- `resources.current_location_id` references `locations.location_id`
+- `disposal_sites.location_id` and `resources.home_location_id` reference `locations.location_id`
+- `collection_requests` references its source location, disposal site, and waste type
+- `assignments` references collection requests, resources, and drivers
 
 This structure lets the application persist the Ghanaian operational model and later analyse it from the database.
+
+`resources/seed_data.csv` uses one typed record per line. Record types are `location`, `road`,
+`waste_type`, `disposal_site`, `resource`, `driver`, `request`, `assignment`, `algorithm_run`,
+and `audit_event`; fields follow the corresponding table column order. Algorithm results generated
+by the console are written to `logs/algorithm_runs.csv` with the exact `algorithm_runs`
+columns: `run_id`, `algorithm_name`, `input_size`, `time_ns`, `memory_kb`, and `date_run`.
+
+### Seed Data Dictionary
+
+- `location,location_id,name,area,location_type,latitude,longitude`
+- `road,road_id,from_location_id,to_location_id,distance_km,travel_time_min,condition_weight`
+- `waste_type,waste_type_id,name,description`
+- `disposal_site,site_id,name,location_id,site_type,capacity_tons,status`
+- `resource,resource_id,resource_type,capacity_tons,availability_status,home_location_id`
+- `driver,driver_id,first_name,last_name,phone,license_number,status`
+- `request,request_id,source_location_id,disposal_site_id,waste_type_id,estimated_weight,urgency,time_submitted,deadline,status`
+- `assignment,assignment_id,request_id,resource_id,driver_id,assigned_time,completion_time,assignment_status`
+- `algorithm_run,run_id,algorithm_name,input_size,time_ns,memory_kb,date_run`
+- `audit_event,audit_id,event_type,description,event_time`
 
 ## Testing & Performance
 
@@ -162,10 +186,11 @@ Performance tracking:
 
 - runtime is captured with `System.nanoTime()`,
 - memory use is estimated with the JVM memory counters,
-- results are appended to `resources/performance_results.csv`,
+- results are written to `logs/algorithm_runs.csv`,
+- completion comparison is exported to `logs/completion_vs_input.csv`,
 - and the console menu prints a simple ASCII graph of recorded runs.
 
-Trace tables are displayed in the console after each algorithm run and can also be persisted through the database schema.
+Audit and trace information is persisted through the `audit_events` database table.
 
 ## How to Run
 
@@ -189,6 +214,12 @@ mvn test
 mvn exec:java
 ```
 
+The interactive menu accepts options 1 through 8. Load the dataset first, then choose which
+request, dispatch, optimisation, trace, performance, or batch-benchmark action to run. Choosing 8 exits and writes
+the performance records collected during that session to `logs/algorithm_runs.csv`.
+Batch benchmark execution also exports `logs/runtime_vs_input.csv`, `logs/memory_vs_input.csv`,
+and `logs/completion_vs_input.csv` for algorithm comparison plots.
+
 ### Database Notes
 - The app uses a local SQLite file at `resources/waste-optimizer.db` by default.
 - On first load, `SchemaInitializer` executes `resources/schema.sql`.
@@ -204,16 +235,17 @@ Ghana Smart Waste-Management Operations Optimizer
 4. Run DP Optimisation
 5. Show Trace Tables
 6. Display Performance Graphs
-7. Exit
+7. Run Batch Benchmark From CSV
+8. Exit
 Select an option: 1
 Dataset loaded successfully.
-Locations: 3
-Roads: 3
-Requests: 4
-Resources: 3
+Locations: 20
+Roads: 29
+Requests: 600
+Resources: 30
 
 Select an option: 3
 Greedy dispatch complete. Fulfilled requests: 2
 
 Select an option: 4
-DP optimisation complete. Best score: 190
+DP optimisation complete. Fulfilled requests: 3

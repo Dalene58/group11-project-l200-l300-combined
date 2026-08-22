@@ -1,0 +1,5 @@
+database\CompletionComparisonCsvWriter.class
+database\AlgorithmPlotDataExporter.class
+database\ServiceRequestCsvReader.class
+algorithms\BatchBenchmarkProcessor.class
+database\AlgorithmRunRepository.class

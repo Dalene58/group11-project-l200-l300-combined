@@ -21,10 +21,10 @@ public class SmokeTests {
 
             DatabaseConnector connector = new DatabaseConnector("jdbc:sqlite:resources/waste-optimizer.db");
             try (Connection connection = connector.connect()) {
-                assertEquals(3, count(connection, "locations"));
-                assertEquals(3, count(connection, "roads"));
-                assertEquals(4, count(connection, "service_requests"));
-                assertEquals(3, count(connection, "resources"));
+                assertEquals(20, count(connection, "locations"));
+                assertEquals(29, count(connection, "roads"));
+                assertEquals(600, count(connection, "service_requests"));
+                assertEquals(30, count(connection, "resources"));
             }
         } finally {
             Files.deleteIfExists(databaseFile);
