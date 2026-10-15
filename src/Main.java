@@ -8,6 +8,10 @@ public class Main {
             System.out.println("Dataset loaded successfully.");
             return;
         }
+        if (args.length > 0 && "run-performance-analysis".equalsIgnoreCase(args[0])) {
+            demoRunner.runPerformanceAnalysis();
+            return;
+        }
         demoRunner.run();
     }
 }

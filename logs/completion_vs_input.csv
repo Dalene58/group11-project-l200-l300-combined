@@ -1,0 +1,11 @@
+algorithm_name,input_size,completed_requests,date_run
+"Greedy Dispatch",10,4,"2026-10-15T01:30:14.397444700"
+"DP Optimisation",10,5,"2026-10-15T01:30:14.397444700"
+"Greedy Dispatch",50,5,"2026-10-15T01:30:14.401703300"
+"DP Optimisation",50,10,"2026-10-15T01:30:14.401703300"
+"Greedy Dispatch",100,9,"2026-10-15T01:30:14.410489"
+"DP Optimisation",100,20,"2026-10-15T01:30:14.410489"
+"Greedy Dispatch",200,21,"2026-10-15T01:30:14.414645600"
+"DP Optimisation",200,43,"2026-10-15T01:30:14.414645600"
+"Greedy Dispatch",500,46,"2026-10-15T01:30:14.499307600"
+"DP Optimisation",500,112,"2026-10-15T01:30:14.499307600"

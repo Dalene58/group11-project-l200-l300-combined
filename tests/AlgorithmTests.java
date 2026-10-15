@@ -52,4 +52,21 @@ public class AlgorithmTests {
         assertTrue(greedy.size() >= 1);
         assertEquals(2, dp.size());
     }
+
+        @Test
+        void optimizersUseEachAvailableTruckIndependently() {
+        List<ServiceRequest> requests = List.of(
+            new ServiceRequest(1, 1, "large", 10, 6, false),
+            new ServiceRequest(2, 1, "small", 8, 4, false),
+            new ServiceRequest(3, 1, "small", 7, 4, false));
+        List<Resource> resources = List.of(
+            new Resource(1, "Small truck", 6, 1, true),
+            new Resource(2, "Unavailable truck", 100, 1, false),
+            new Resource(3, "Second truck", 4, 1, true));
+
+        assertEquals(List.of(1, 2), GreedyOptimizer.dispatch(requests, resources).stream()
+            .map(ServiceRequest::getRequestId).toList());
+        assertEquals(List.of(1, 2), DynamicProgrammingOptimizer.optimise(requests, resources).stream()
+            .map(ServiceRequest::getRequestId).toList());
+        }
 }

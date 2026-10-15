@@ -8,8 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
 
 public class DataLoader {
     public void load(Connection connection, Path csvPath) throws SQLException, IOException {
@@ -25,69 +26,75 @@ public class DataLoader {
     }
 
     private void load(Connection connection, BufferedReader reader) throws SQLException, IOException {
-        PreparedStatement locationStatement = null;
-        PreparedStatement roadStatement = null;
-        PreparedStatement requestStatement = null;
-        PreparedStatement resourceStatement = null;
+        boolean originalAutoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        int lineNumber = 0;
         try {
-            locationStatement = connection.prepareStatement(
-                "INSERT INTO locations(location_id, name, region, depot) VALUES (?, ?, ?, ?)");
-            roadStatement = connection.prepareStatement(
-                "INSERT INTO roads(road_id, from_location_id, to_location_id, distance_km) VALUES (?, ?, ?, ?)");
-            requestStatement = connection.prepareStatement(
-                "INSERT INTO service_requests(request_id, location_id, request_type, urgency, volume, fulfilled) VALUES (?, ?, ?, ?, ?, ?)");
-            resourceStatement = connection.prepareStatement(
-                "INSERT INTO resources(resource_id, name, capacity, current_location_id, available) VALUES (?, ?, ?, ?, ?)");
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 0 || parts[0].trim().isEmpty() || parts[0].startsWith("#")) {
+                lineNumber++;
+                if (line.trim().isEmpty() || line.trim().startsWith("#")) {
                     continue;
                 }
-
-                String recordType = parts[0].trim();
-                if ("location".equals(recordType)) {
-                    locationStatement.setInt(1, Integer.parseInt(parts[1].trim()));
-                    locationStatement.setString(2, parts[2].trim());
-                    locationStatement.setString(3, parts[3].trim());
-                    locationStatement.setBoolean(4, Boolean.parseBoolean(parts[4].trim()));
-                    locationStatement.executeUpdate();
-                } else if ("road".equals(recordType)) {
-                    roadStatement.setInt(1, Integer.parseInt(parts[1].trim()));
-                    roadStatement.setInt(2, Integer.parseInt(parts[2].trim()));
-                    roadStatement.setInt(3, Integer.parseInt(parts[3].trim()));
-                    roadStatement.setDouble(4, Double.parseDouble(parts[4].trim()));
-                    roadStatement.executeUpdate();
-                } else if ("request".equals(recordType)) {
-                    requestStatement.setInt(1, Integer.parseInt(parts[1].trim()));
-                    requestStatement.setInt(2, Integer.parseInt(parts[2].trim()));
-                    requestStatement.setString(3, parts[3].trim());
-                    requestStatement.setInt(4, Integer.parseInt(parts[4].trim()));
-                    requestStatement.setInt(5, Integer.parseInt(parts[5].trim()));
-                    requestStatement.setBoolean(6, Boolean.parseBoolean(parts[6].trim()));
-                    requestStatement.executeUpdate();
-                } else if ("resource".equals(recordType)) {
-                    resourceStatement.setInt(1, Integer.parseInt(parts[1].trim()));
-                    resourceStatement.setString(2, parts[2].trim());
-                    resourceStatement.setInt(3, Integer.parseInt(parts[3].trim()));
-                    resourceStatement.setInt(4, Integer.parseInt(parts[4].trim()));
-                    resourceStatement.setBoolean(5, Boolean.parseBoolean(parts[5].trim()));
-                    resourceStatement.executeUpdate();
+                String[] values = parseCsv(line);
+                String type = values[0].trim().toLowerCase();
+                String sql = switch (type) {
+                    case "location" -> "INSERT INTO locations VALUES (?, ?, ?, ?, ?, ?)";
+                    case "road" -> "INSERT INTO roads VALUES (?, ?, ?, ?, ?, ?)";
+                    case "waste_type" -> "INSERT INTO waste_types VALUES (?, ?, ?)";
+                    case "disposal_site" -> "INSERT INTO disposal_sites VALUES (?, ?, ?, ?, ?, ?)";
+                    case "resource" -> "INSERT INTO resources VALUES (?, ?, ?, ?, ?)";
+                    case "driver" -> "INSERT INTO drivers VALUES (?, ?, ?, ?, ?, ?)";
+                    case "request" -> "INSERT INTO collection_requests VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    case "assignment" -> "INSERT INTO assignments VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    case "algorithm_run" -> "INSERT INTO algorithm_runs VALUES (?, ?, ?, ?, ?, ?)";
+                    case "audit_event" -> "INSERT INTO audit_events VALUES (?, ?, ?, ?)";
+                    default -> throw new IllegalArgumentException("Unknown CSV record type: " + type);
+                };
+                try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                    if (values.length != sqlParameterCount(sql) + 1) {
+                        throw new IllegalArgumentException("Wrong field count");
+                    }
+                    for (int index = 1; index < values.length; index++) {
+                        statement.setString(index, values[index].trim());
+                    }
+                    statement.executeUpdate();
                 }
             }
+            connection.commit();
+        } catch (RuntimeException | SQLException exception) {
+            connection.rollback();
+            throw new IllegalArgumentException("Invalid CSV record at line " + lineNumber, exception);
         } finally {
-            if (resourceStatement != null) {
-                resourceStatement.close();
-            }
-            if (requestStatement != null) {
-                requestStatement.close();
-            }
-            if (roadStatement != null) {
-                roadStatement.close();
-            }
-            if (locationStatement != null) {
-                locationStatement.close();
+            connection.setAutoCommit(originalAutoCommit);
+        }
+    }
+
+    private int sqlParameterCount(String sql) {
+        return (int) sql.chars().filter(character -> character == '?').count();
+    }
+
+    private String[] parseCsv(String line) {
+        ArrayList<String> values = new ArrayList<>();
+        StringBuilder value = new StringBuilder();
+        boolean quoted = false;
+        for (int index = 0; index < line.length(); index++) {
+            char character = line.charAt(index);
+            if (character == '"') {
+                if (quoted && index + 1 < line.length() && line.charAt(index + 1) == '"') {
+                    value.append('"');
+                    index++;
+                } else {
+                    quoted = !quoted;
+                }
+            } else if (character == ',' && !quoted) {
+                values.add(value.toString());
+                value.setLength(0);
+            } else {
+                value.append(character);
             }
         }
+        values.add(value.toString());
+        return values.toArray(String[]::new);
     }
 }
