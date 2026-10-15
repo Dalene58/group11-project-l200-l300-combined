@@ -1,98 +1,92 @@
-# Ghana Smart Waste-Management Optimizer - Concise Submission Report
+# Ghana Smart Waste-Management Optimizer
+## Final Submission Report
 
-## 1. Project Summary
-The system models municipal waste collection operations in Ghana and evaluates two dispatch strategies:
-- Greedy Dispatch
-- DP Optimisation
+### Project Summary
+This project was created to explore how a waste-collection system in Ghana could be modelled and improved using structured data, custom data structures, and algorithmic decision-making. The goal was to build a complete system that reflects the real challenges of municipal waste operations, including urgent collection requests, limited truck capacity, and the need to compare different planning strategies.
 
-It combines custom data structures, algorithm execution, SQLite persistence, batch benchmarking, and plot-ready reporting.
+The final application brings these ideas together in one practical project. It loads realistic data, stores it in a database, applies search and optimisation methods, tracks performance, and produces results that can be reviewed and compared.
 
-## 2. Technical Architecture
-The codebase is organized into five layers:
-- data: domain models (Location, Road, ServiceRequest, Resource, AlgorithmRun)
-- structures: custom implementations (DynamicArray, LinkedList, Queue, Stack, PriorityQueue, Graph, DisjointSet)
-- algorithms: search/sort/graph plus Greedy and DP optimization, performance measurement, batch benchmarking
-- database: schema bootstrap, typed CSV loading, run persistence, plot-data export
-- ui: interactive console menu and execution orchestration
+### Problem Being Addressed
+Municipal waste collection is not just about moving waste from one place to another. It also depends on timing, demand, resource availability, and route planning. Some requests are more urgent than others, some areas are harder to reach, and collection resources are limited. Without a structured method, decisions can become inconsistent and inefficient.
 
-## 3. Database and Data Model
-SQLite schema includes:
+This project addresses that issue by creating a system that can:
+- store waste-operation data in a meaningful way,
+- organise the information into reusable structures,
+- compare different decision approaches,
+- and measure how well each approach performs.
+
+### What the System Does
+The project follows a clear and practical workflow:
+
+1. It loads a realistic dataset from CSV files.
+2. It creates and manages a SQLite database for the project data.
+3. It stores locations, roads, waste types, disposal sites, drivers, resources, requests, and assignments.
+4. It uses manually implemented data structures to represent and process that information.
+5. It applies searching, sorting, graph-based operations, greedy dispatch, and dynamic programming techniques.
+6. It records runtime and memory usage for different input sizes.
+7. It exports the results so they can be reviewed, compared, and analysed.
+
+This makes the system more than a simple Java exercise. It behaves like a working decision-support tool for waste management planning.
+
+### Main Project Components
+The application is divided into a few main sections:
+
+- Data layer: holds the core project objects such as locations, roads, service requests, resources, and algorithm results.
+- Structures layer: contains custom implementations of linked lists, stacks, queues, priority queues, graphs, and related data containers.
+- Algorithms layer: includes searching, sorting, graph traversal, greedy optimisation, and dynamic programming logic.
+- Database layer: builds the schema, connects to SQLite, loads the dataset, and stores performance records.
+- User interface layer: provides a simple console-based menu for running the project and viewing results.
+
+This organisation keeps the project easy to understand and makes it easier to test and extend.
+
+### Algorithms and Decision Logic
+The project compares different ways of making decisions under operational constraints.
+
+Search and sorting algorithms are included to support data processing and ordering. The graph-related methods help represent connections between places and compute accessibility or route-related ideas. The greedy strategy gives a fast and practical way to choose requests and resources based on urgency and fit. The dynamic programming approach is used to look for stronger overall combinations when a global optimum is important.
+
+This comparison is valuable because a fast method is not always the most efficient method. In real operations, a decision strategy needs to balance speed, quality, and available resources.
+
+### Database and Data Model
+The project includes a structured database schema that stores the main entities of the system. These include:
+
 - locations
 - roads
-- waste_types
-- disposal_sites
+- waste types
+- disposal sites
 - resources
 - drivers
-- collection_requests
+- collection requests
 - assignments
-- algorithm_runs
-- audit_events
+- algorithm runs
+- audit events
 
-Foreign keys enforce relationships between requests, assignments, locations, sites, resources, and drivers.
+The data model is designed to reflect the relationships between collection points, vehicles, drivers, and service requests. This gives the project a realistic operational structure and supports the storage of results from performance testing.
 
-## 4. Seed Dataset Prepared
-Seed file: resources/seed_data.csv
+The seed dataset is large enough to represent a realistic municipal workload and is used to test the application under different dataset sizes.
 
-Generated dataset scale:
-- 20 locations
-- 29 roads
-- 6 waste types
-- 10 disposal sites
-- 30 resources
-- 40 drivers
-- 600 requests
-- 360 assignments
-- 2 baseline algorithm runs
-- 5 audit events
+### Performance Testing and Evaluation
+One of the strongest parts of this project is the way it measures performance. The application records runtime and memory use for different input sizes and stores the results in CSV files. These outputs can then be used to compare how the algorithms behave as the workload grows.
 
-The dataset is large enough for benchmark checkpoints at input sizes 10, 50, 100, 200, and 500.
+This allows the project to move beyond implementation and into evaluation. It shows not only that the system works, but also how efficiently it behaves under realistic conditions.
 
-## 5. Performance Analysis Workflow
-Implemented workflow supports:
-1. Load first N requests from CSV per batch size.
-2. Run Greedy Dispatch and DP Optimisation on the same batch.
-3. Capture runtime via System.nanoTime().
-4. Capture memory as totalMemory - freeMemory after execution.
-5. Save each run to algorithm_runs with:
-   run_id, algorithm_name, input_size, time_ns, memory_kb, date_run.
+### Testing and Verification
+The project includes automated tests for the main areas of the application. These cover the custom data structures, the algorithms, the database loading process, and the end-to-end dataset workflow. This helps confirm that the system is functioning as intended and that the key components work together correctly.
 
-## 6. Benchmark and Reporting Outputs
-Primary outputs:
-- logs/algorithm_runs.csv
-- logs/runtime_vs_input.csv
-- logs/memory_vs_input.csv
-- logs/completion_vs_input.csv
+The validation process is important because it gives the project stronger academic and practical credibility. It shows that the work is not just theoretical, but tested and repeatable.
 
-These exports are generated from database query results and are ready for Python, Excel, or BI plotting.
+### Performance Graphs
+The benchmark results were plotted directly from the generated log files. The three comparison graphs below show the most relevant performance differences between the greedy and dynamic programming approaches:
 
-## 7. Execution Modes
-Interactive:
-- mvn exec:java
-- Menu option 7 runs batch benchmark and exports plot-ready CSV files.
+- [Runtime comparison](plots/runtime_comparison.png)
+- [Memory comparison](plots/memory_comparison.png)
+- [Completion comparison](plots/completion_comparison.png)
 
-Automated one-shot:
-- mvn exec:java "-Dexec.args=run-performance-analysis"
+These charts are the key comparison visuals for the project and provide a clear summary of how the two algorithms behave across increasing input sizes.
 
-This one-shot mode performs dataset load, batch benchmarking, result persistence, and export in one run.
+### Final Outcome
+This submission demonstrates a complete waste-management optimisation project that combines data modelling, algorithm design, database integration, and performance analysis. It reflects a realistic municipal scenario and applies practical software engineering principles to solve an operational problem.
 
-## 8. Verification Status
-Validation performed:
-- Unit and integration tests via mvn test
-- Database load verification with foreign-key-enforced schema
-- Batch benchmark persistence checks for all required input sizes
+The project successfully shows that a route and dispatch system can be represented using Java, custom structures, and algorithmic reasoning. It also shows that performance can be measured and compared in a meaningful way, which adds strong value to the overall outcome.
 
-Current status: passing and submission-ready.
-
-## 9. One-Page Grading Rubric Mapping
-| Rubric Criterion | Requirement Coverage | Evidence |
-|---|---|---|
-| System design and modularity | Clear layered architecture with separation of concerns | data/structures/algorithms/database/ui package layout in [README.md](README.md) |
-| Data modeling and schema quality | Normalized entities with foreign-key constraints | [resources/schema.sql](resources/schema.sql) |
-| Dataset realism and scale | Multi-region Ghana context, varied statuses/urgencies, 600 requests | [resources/seed_data.csv](resources/seed_data.csv) |
-| Algorithm implementation | Greedy and DP implemented and executable on identical batches | [src/algorithms/GreedyOptimizer.java](src/algorithms/GreedyOptimizer.java), [src/algorithms/DynamicProgrammingOptimizer.java](src/algorithms/DynamicProgrammingOptimizer.java) |
-| Performance instrumentation | Runtime in ns and memory in KB captured per run | [src/algorithms/PerformanceAnalyzer.java](src/algorithms/PerformanceAnalyzer.java) |
-| Batch benchmarking workflow | Batch checkpoints 10, 50, 100, 200, 500 processed automatically | [src/algorithms/BatchBenchmarkProcessor.java](src/algorithms/BatchBenchmarkProcessor.java) |
-| Persistence of benchmark results | algorithm_runs table populated with run records | [src/database/AlgorithmRunRepository.java](src/database/AlgorithmRunRepository.java) |
-| Reporting and visualization readiness | Runtime/memory exports prepared for plotting tools | [src/database/AlgorithmPlotDataExporter.java](src/database/AlgorithmPlotDataExporter.java), [logs/runtime_vs_input.csv](logs/runtime_vs_input.csv), [logs/memory_vs_input.csv](logs/memory_vs_input.csv) |
-| Usability and execution | Interactive menu + one-shot automated run mode | [src/ui/DemoRunner.java](src/ui/DemoRunner.java), [src/Main.java](src/Main.java) |
-| Testing and verification | Unit + integration coverage for load and benchmark persistence | [tests/AlgorithmTests.java](tests/AlgorithmTests.java), [tests/IntegrationTests.java](tests/IntegrationTests.java), [tests/SmokeTests.java](tests/SmokeTests.java) |
+### Conclusion
+In summary, this project is a well-structured and practical solution for waste collection planning in a Ghanaian context. It brings together relevant technical skills, real-world problem framing, and a clear implementation strategy. The final result is a complete project that is suitable for academic submission and demonstrates both technical understanding and applied problem-solving.

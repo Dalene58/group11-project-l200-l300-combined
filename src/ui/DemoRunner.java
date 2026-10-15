@@ -78,7 +78,7 @@ public class DemoRunner {
                 }
                 case "4" -> {
                     if (requireLoaded(loaded)) {
-                        runs.add(runDynamicProgramming(requests));
+                        runs.add(runDynamicProgramming(requests, resources));
                     }
                 }
                 case "5" -> menu.printTraceStatus();
@@ -113,9 +113,9 @@ public class DemoRunner {
         return run;
     }
 
-    private AlgorithmRun runDynamicProgramming(List<ServiceRequest> requests) {
+    private AlgorithmRun runDynamicProgramming(List<ServiceRequest> requests, List<Resource> resources) {
         return algorithms.PerformanceAnalyzer.measure("DP Optimisation",
-                () -> menu.printFulfilment("DP optimisation complete", DynamicProgrammingOptimizer.optimise(requests, 10)));
+                () -> menu.printFulfilment("DP optimisation complete", DynamicProgrammingOptimizer.optimise(requests, resources)));
     }
 
     private List<AlgorithmRun> runBatchBenchmarks() {

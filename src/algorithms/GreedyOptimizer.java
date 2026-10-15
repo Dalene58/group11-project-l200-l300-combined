@@ -9,14 +9,22 @@ import data.ServiceRequest;
 
 public class GreedyOptimizer {
     public static List<ServiceRequest> dispatch(List<ServiceRequest> requests, List<Resource> resources) {
-        List<ServiceRequest> ordered = new ArrayList<>(requests);
-        ordered.sort(Comparator.comparingInt(ServiceRequest::getUrgency).reversed());
+        List<ServiceRequest> remaining = new ArrayList<>(requests);
         List<ServiceRequest> fulfilled = new ArrayList<>();
-        int capacityLeft = resources.stream().filter(Resource::isAvailable).mapToInt(Resource::getCapacity).sum();
-        for (ServiceRequest request : ordered) {
-            if (request.getVolume() <= capacityLeft) {
-                fulfilled.add(request.withFulfilled(true));
-                capacityLeft -= request.getVolume();
+
+        for (Resource resource : resources) {
+            if (!resource.isAvailable()) {
+                continue;
+            }
+            List<ServiceRequest> ordered = new ArrayList<>(remaining);
+            ordered.sort(Comparator.comparingInt(ServiceRequest::getUrgency).reversed());
+            int capacityLeft = resource.getCapacity();
+            for (ServiceRequest request : ordered) {
+                if (request.getVolume() <= capacityLeft) {
+                    fulfilled.add(request.withFulfilled(true));
+                    remaining.remove(request);
+                    capacityLeft -= request.getVolume();
+                }
             }
         }
         return fulfilled;

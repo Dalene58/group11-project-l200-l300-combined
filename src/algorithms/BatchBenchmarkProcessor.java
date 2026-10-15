@@ -37,7 +37,7 @@ public class BatchBenchmarkProcessor {
                 runs.add(PerformanceAnalyzer.measure("Greedy Dispatch", batch.size(),
                         () -> GreedyOptimizer.dispatch(batch, benchmarkResources(batchSize))));
                 runs.add(PerformanceAnalyzer.measure("DP Optimisation", batch.size(),
-                        () -> DynamicProgrammingOptimizer.optimise(batch, 10)));
+                    () -> DynamicProgrammingOptimizer.optimise(batch, benchmarkResources(batchSize))));
             }
             return runs;
         } catch (Exception exception) {
@@ -58,7 +58,7 @@ public class BatchBenchmarkProcessor {
                 int greedyCompleted = GreedyOptimizer.dispatch(batch, benchmarkResources(batchSize)).size();
                 rows.add(new AlgorithmCompletion("Greedy Dispatch", batch.size(), greedyCompleted, dateRun));
 
-                int dpCompleted = DynamicProgrammingOptimizer.optimise(batch, 10).size();
+                int dpCompleted = DynamicProgrammingOptimizer.optimise(batch, benchmarkResources(batchSize)).size();
                 rows.add(new AlgorithmCompletion("DP Optimisation", batch.size(), dpCompleted, dateRun));
             }
             return rows;
@@ -69,7 +69,11 @@ public class BatchBenchmarkProcessor {
 
     private List<Resource> benchmarkResources(int batchSize) {
         List<Resource> resources = new ArrayList<>();
-        resources.add(new Resource(1, "Benchmark Truck", Math.max(10, batchSize), 1, true));
+        int truckCount = Math.max(2, Math.min(8, batchSize / 60 + 2));
+        for (int i = 1; i <= truckCount; i++) {
+            int capacity = 12 + (i * 8) + (batchSize / 20);
+            resources.add(new Resource(i, "Benchmark Truck " + i, capacity, 1, true));
+        }
         return resources;
     }
 
